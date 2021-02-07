@@ -1,6 +1,6 @@
 // upload and receive id
 function sendImage(){
-  var formData = new FormData($('#imgForm').get(0));
+  var formData = {}
 
   //画像処理してformDataに追加
   if ($("#canvas").length) {
@@ -8,7 +8,7 @@ function sendImage(){
       var canvasImage = $("#canvas").get(0);
       //オリジナル容量(画質落としてない場合の容量)を取得
       var originalBinary = canvasImage.toDataURL("image/jpeg"); //画質落とさずバイナリ化
-      var originalBlob = base64ToBlob(originalBinary); //オリジナル容量blobデータを取得
+      var originalBlob = originalBinary; //オリジナル容量blobデータを取得
       console.log(originalBlob["size"]);
       //オリジナル容量blobデータをアップロード用blobに設定
       var uploadBlob = originalBlob;
@@ -17,12 +17,12 @@ function sendImage(){
           //2MB以下に落とす
           var capacityRatio = 1000000 / originalBlob["size"];
           var processingBinary = canvasImage.toDataURL("image/jpeg", capacityRatio); //画質落としてバイナリ化
-          uploadBlob = base64ToBlob(processingBinary); //画質落としたblobデータをアップロード用blobに設定
+          uploadBlob = processingBinary; //画質落としたblobデータをアップロード用blobに設定
           console.log(capacityRatio);
           console.log(uploadBlob["size"]);
       }
       //アップロード用blobをformDataに追加
-      formData.append("file", uploadBlob, 'catimg.jpeg');
+      formData["image"] = uploadBlob;
   }
 
   $.ajax($(this).attr('action'), {
@@ -30,7 +30,7 @@ function sendImage(){
     type: 'post',
     processData: false,
     contentType: false,
-    data: formData,
+    data: JSON.stringify(formData),
     success: console.log('send!')
   })
   .done(

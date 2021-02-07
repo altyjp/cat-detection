@@ -2,8 +2,11 @@
 import os
 import uuid
 import base64
+import numpy as np
 from cat import Cat
 from flask import Flask, request, jsonify
+import json
+import cv2
 
 UPLOAD_FOLDER = './uploaded_cat_images'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
@@ -21,18 +24,21 @@ and returns image_base64
 @app.route('/api/detect_cat/image',methods=["POST"])
 def post_detect_cat_image():
     result_id = str(uuid.uuid4())
-    file = request.files['file']
-    if file.filename == '':
-        print('ERROR : No_file_uploaded')
-        return '{"error_msg" : "ファイルがアップロードされていません。", "code" : "No_file_uploaded."} '
-    if '.' in file.filename and file.filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS == 0:
-        print('ERROR : Invaild_file_type')
-        return '{"error_msg" : "ファイルが不正です。対応した画像ではありません。", "code" : "Invaild_file_type."} '
+
+    # decode json string
+    request_row_data = request.data.decode('utf-8')
+    request_json_data = json.loads(request_row_data)
+    request_img = request_json_data["image"]
+
+    img_binary = base64.b64decode(request_img.split(",")[1])
+    jpg=np.frombuffer(img_binary,dtype=np.uint8)
 
     # save file
-    extend = file.filename.rsplit('.', 1)[1].lower()
+    #raw image <- jpg
+    img = cv2.imdecode(jpg, cv2.IMREAD_COLOR)
+    extend = 'jpg'
     save_file_path = os.path.join(app.config['UPLOAD_FOLDER'], result_id) + '.' + extend
-    file.save(save_file_path)
+    cv2.imwrite(save_file_path, img)
 
     # start detect
     cat = Cat(save_file_path)
