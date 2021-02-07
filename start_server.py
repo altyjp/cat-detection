@@ -55,5 +55,5 @@ def post_detect_cat_image():
 if __name__ == "__main__":
     # show server mapping.
     print(app.url_map)
-    app.run(host=os.getenv("APP_ADDRESS", 'localhost'), \
+    app.run(host='0.0.0.0', \
     port=os.getenv("APP_PORT", 8080))
