@@ -35,10 +35,10 @@ function sendImage(){
   })
   .done(
       function(data){
-        var responseJSON = $.parseJSON( data );
+        var responseJSON = data;
         $("#result").html(
-            '<h2>猫の数:'+ responseJSON.cat_num + '匹</h2>' +
-            '<img src="./uploads/'+ responseJSON.file_name +'" alt="" class="resultImage" border="0" />'
+            '<h2>猫の数:'+ responseJSON.cat_number + '匹</h2>' +
+            '<img src="'+ responseJSON.encode_prefix + responseJSON.image_base64 +'" alt="" class="resultImage" border="0" />'
           );
         return false;
   })

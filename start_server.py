@@ -1,24 +1,22 @@
 # -*- coding: utf-8 -*-
 import os
 import uuid
-from catDetector import catDetector
-from flask import Flask, request, send_from_directory
+import base64
+from cat import Cat
+from flask import Flask, request, jsonify
 
-UPLOAD_FOLDER = './static_resources/uploads'
+UPLOAD_FOLDER = './uploaded_cat_images'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 
 # flask
 app = Flask(__name__, static_folder='static_resources')
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-# catDetector
-cat_detector = catDetector()
-
 """
 POST /api/detect_cat/image
 Post cat image for cat detection.
 The cat detector called synchronously by this method,
-and returns file name.
+and returns image_base64
 """
 @app.route('/api/detect_cat/image',methods=["POST"])
 def post_detect_cat_image():
@@ -32,14 +30,26 @@ def post_detect_cat_image():
         return '{"error_msg" : "ファイルが不正です。対応した画像ではありません。", "code" : "Invaild_file_type."} '
 
     # save file
-    extend = '.' + file.filename.rsplit('.', 1)[1].lower()
-    save_file_path = os.path.join(app.config['UPLOAD_FOLDER'], result_id) + extend
+    extend = file.filename.rsplit('.', 1)[1].lower()
+    save_file_path = os.path.join(app.config['UPLOAD_FOLDER'], result_id) + '.' + extend
     file.save(save_file_path)
-    # start detect
-    cat_num = cat_detector.detect_cat(save_file_path)
 
-    # retrun id
-    return '{"file_name" : "' + result_id + extend + '", "cat_num" :' + str(cat_num) +' }'
+    # start detect
+    cat = Cat(save_file_path)
+
+    # encode result
+    encode_prefix = 'data:image/' + extend +';base64,'
+    with open(cat.get_file_path(), "rb") as f:
+        img_base64 = base64.b64encode(f.read()).decode('utf-8')
+
+    response = {'cat_number' : cat.get_number() , 'encode_prefix' : encode_prefix, 'image_base64' : img_base64}
+
+    # remove file
+    os.remove(cat.get_file_path())
+
+    # retrun result
+    return jsonify(response)
+
 
 # main
 if __name__ == "__main__":

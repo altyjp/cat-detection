@@ -112,8 +112,8 @@ div#result_graph{
 }
 
 input#submit_button {
-    padding: 20px 100px;
-    font-size: 10em;
+    padding: 1px 10px;
+    font-size: 1em;
 }
 
 .resultImage{
