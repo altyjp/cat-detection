@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>ネコ検出キット</title>
+        <meta charset="UTF-8">
+        <link href="css/pc.css" rel ="stylesheet" type="text/css">
+        <link href="css/sp.css" media="screen and (max-width:768px)"
+              rel ="stylesheet" type="text/css">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+        <script id="openCvUtilLib" src="lib/utils.js" type="text/javascript"></script>
+        <script src="js/app.js" type="text/javascript"></script>
+
+        <div id="baseitem">
+            <div id="mainitem">
+                <h2 style="margin:0;top:20px">ネコを検出するシステム</h2>
+                <p>
+                    アップロードされた画像からネコを検出します。<br/>
+                </p>
+                <p>注意事項</p>
+                <p style="font-size: 0.9em;">
+                重要なファイルはアップロードしないでください。<br/>
+                </p>
+                <form id="imgForm">
+                    <input type="file" id ="file_button">
+                    <input type="button" value="アップロード" id="submit_button">
+                </form>
+                <div id="result">
+                    <h2>ロード中</h2>
+                    <!-- control by connection.js -->
+                </div>
+                <hr/>
+                <p>CLB</p>
+                <br/>
+                
+                preview: <br/>
+                <img src="" id="preview"/>
+
+                canvas: <br/>
+                <canvas id="canvas"></canvas>
+
+                <div id="errorMessage"></div>
+            </div>
+
+        </div>
+
+
+    </body>
+</html>
