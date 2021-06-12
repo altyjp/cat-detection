@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>ネコ検出キット</title>
+        <meta charset="UTF-8">
+        <link href="css/pc.css" rel ="stylesheet" type="text/css">
+        <link href="css/sp.css" media="screen and (max-width:768px)"
+              rel ="stylesheet" type="text/css">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    </head>
+    <body>
+        <script type="text/javascript">
+
+            // Add event listener
+            const catCascadeFile = './cascade.xml';
+
+            function openCvready() {
+                cv['onRuntimeInitialized']=()=>{
+                    let fileButton = document.getElementById("file_button");
+                    fileButton.addEventListener('change', canvasDraw);
+                    let submitButton = document.getElementById("submit_button");
+                    submitButton.addEventListener('click', sendImage);
+
+                    let utils = new Utils('errorMessage');
+                    utils.createFileFromUrl(catCascadeFile, catCascadeFile, () => {
+                        setMessageToStatusArea("ネコ画像 検出システム：読み込み完了 / Cat detection system : Ready.");
+                    });
+                }
+            };
+        
+
+
+            // upload and receive id
+            function sendImage(){
+                detectCat(document.getElementById("preview"), catCascadeFile);
+                return false;
+            }
+            
+            function canvasDraw() {
+                var file = document.getElementById("file_button").files[0];
+
+                //画像ファイルかチェック
+                if (file["type"] != "image/jpeg" && file["type"] != "image/png" && file["type"] != "image/gif") {
+                    alert("画像ファイルを選択してください");
+                    document.getElementById("file_button").val(''); //選択したファイルをクリア
+
+                } else {
+                    var fr = new FileReader();
+
+                    fr.onload = function() {
+                        //選択した画像を一旦imgタグに表示
+                        document.getElementById("preview").src = fr.result;
+
+                        // mainitem
+                        var mainitem = document.getElementById("mainitem");
+
+                        //imgタグに表示した画像をimageオブジェクトとして取得
+                        var image = new Image();
+                        image.onload = function() { 
+                            //resize
+                            var w = mainitem.clientWidth - 100;
+                            var ratio = w / image.width;
+                            var h = image.height * ratio;
+
+                            //canvas
+                            var canvas = document.getElementById("canvas");
+                            var ctx = canvas.getContext('2d');
+                            document.getElementById("canvas").width = w;
+                            document.getElementById("canvas").height = h;
+                            ctx.drawImage(image, 0, 0, w, h);
+                        }
+                        image.src = document.getElementById("preview").src;
+                    };
+
+                    fr.readAsDataURL(file);
+                }
+            }
+
+
+            
+
+            function detectCat(imgDataElm , catCascadeFile) {
+
+                let detector = new cv.CascadeClassifier();
+                detector.load(catCascadeFile);
+                let cats = new cv.RectVector();
+                let imgData = cv.imread('canvas');
+                detector.detectMultiScale(imgData, cats, 1.1, 3, 0);
+
+                for (let i =0; i < cats.size(); i++) {
+                    let point1 = new cv.Point(cats.get(i).x, cats.get(i).y);
+                    let point2 = new cv.Point(cats.get(i).x + cats.get(i).width, cats.get(i).y + cats.get(i).height);
+                    cv.rectangle(imgData, point1, point2, [255, 0, 0, 255]);
+                }
+
+                setMessageToStatusArea(cats.size() + " 匹のネコが検出されました。 / cat(s) detected.");
+                cv.imshow('canvas', imgData);
+                imgData.delete(); 
+                detector.delete();
+                cats.delete();
+            }
+
+            function setMessageToStatusArea (strMessage) {
+                document.getElementById("status_area").innerHTML = "<p>" + strMessage + "</p>";
+            }
+
+        </script>
+
+        <div id="baseitem">
+            <div id="mainitem">
+                <h2 style="margin:0;top:20px">ネコを検出するシステム / Cat detection system.</h2>
+                <p>
+                    画像からネコを検出します。<br/>
+                </p>
+                <form id="imgForm">
+                    <input type="file" id ="file_button">
+                    <input type="button" value="ネコを検出 / Dectect cat" id="submit_button">
+                </form>
+                <div id="status_area">
+                    <p>ロード中. / Loading.</p>
+                    <!-- control by setMessageToStatusArea -->
+                </div>
+                <canvas id="canvas"></canvas>
+                <hr/>
+                <p>CLB</p>
+                <br/>
+
+                <!-- debug area -->
+                <div id="errorMessage"></div>
+                <img src="" id="preview" style="visibility:hidden;display: none;"/>
+            </div>
+        </div>
+
+        <script src="lib/opencv.js" type="text/javascript" onload="openCvready();"></script>
+        <script src="lib/utils.js" type="text/javascript"></script>
+    </body>
+</html>
