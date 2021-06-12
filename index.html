@@ -82,9 +82,6 @@ and open the template in the editor.
                 }
             }
 
-
-            
-
             function detectCat(imgDataElm , catCascadeFile) {
 
                 let detector = new cv.CascadeClassifier();
@@ -99,7 +96,7 @@ and open the template in the editor.
                     cv.rectangle(imgData, point1, point2, [255, 0, 0, 255]);
                 }
 
-                setMessageToStatusArea(cats.size() + " 匹のネコが検出されました。 / cat(s) detected.");
+                setMessageToStatusArea(cats.size() + " 匹のネコが検出されました。 / " + cats.size() + " cat(s) detected.");
                 cv.imshow('canvas', imgData);
                 imgData.delete(); 
                 detector.delete();
