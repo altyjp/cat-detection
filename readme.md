@@ -1,5 +1,6 @@
-# Cat-detector ネコを検出する究極のシステム
-Cat-detector; The Answer to the Ultimate Question of Life, the Universe, and Everything.
+# Cat-detector ver 42 ネコを検出する究極のシステム ver 42
+Cat-detector;  
+The Answer to the Ultimate Question of Life, the Universe, and Everything.
 
 # デプロイ
 github-pages を利用して 自動的にデプロイが開始されます。
