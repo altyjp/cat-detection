@@ -108,6 +108,7 @@ and open the template in the editor.
             }
 
             function setMessageToStatusArea (strMessage) {
+                document.getElementById('status_area').style.display = 'block';
                 document.getElementById("status_area").innerHTML = "<p>" + strMessage + "</p>";
             }
 
@@ -128,7 +129,7 @@ and open the template in the editor.
                             <input type="file" id="file_button" class="form-input">
                             <button type="button" id="submit_button" class="button">Detect Cat</button>
                         </form>
-                        <div id="status_area" class="status-area"></div>
+                        <div id="status_area" class="status-area" style="display: none;"></div>
                         <div class="canvas-container">
                             <canvas id="canvas"></canvas>
                         </div>
