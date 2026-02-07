@@ -26,13 +26,15 @@ and open the template in the editor.
             function openCvready() {
                 cv['onRuntimeInitialized']=()=>{
                     // Hide loading, show main
-                    document.getElementById('loading_screen').style.display = 'none';
-                    document.getElementById('main_content').style.display = 'block';
-
-                    let fileButton = document.getElementById("file_button");
-                    fileButton.addEventListener('change', canvasDraw);
-                    let submitButton = document.getElementById("submit_button");
-                    submitButton.addEventListener('click', sendImage);
+                    let utils = new Utils('errorMessage');
+                    utils.createFileFromUrl(catCascadeFile, catCascadeFile, () => {
+                        document.getElementById('loading_screen').style.display = 'none';
+                        document.getElementById('main_content').style.display = 'block';
+                        let fileButton = document.getElementById("file_button");
+                        fileButton.addEventListener('change', canvasDraw);
+                        let submitButton = document.getElementById("submit_button");
+                        submitButton.addEventListener('click', sendImage);
+                    });
                 }
             };
         
@@ -126,6 +128,7 @@ and open the template in the editor.
                             <input type="file" id="file_button" class="form-input">
                             <button type="button" id="submit_button" class="button">Detect Cat</button>
                         </form>
+                        <div id="status_area" class="status-area"></div>
                         <div class="canvas-container">
                             <canvas id="canvas"></canvas>
                         </div>
