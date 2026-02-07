@@ -109,7 +109,10 @@ and open the template in the editor.
 
             function setMessageToStatusArea (strMessage) {
                 document.getElementById('status_area').style.display = 'block';
-                document.getElementById("status_area").innerHTML = "<p>" + strMessage + "</p>";
+                var msgDiv = document.getElementById('status_message');
+                if (msgDiv) {
+                    msgDiv.innerHTML = "<p>" + strMessage + "</p>";
+                }
             }
 
         </script>
@@ -125,11 +128,15 @@ and open the template in the editor.
                         <h2>Detect cats in your images</h2>
                         <p class="desc">Upload an image and click the button to detect cats using OpenCV.js.</p>
                         <form id="imgForm" class="form">
-                            <label for="file_button" class="form-label">Select image</label>
+                            <label for="file_button" class="form-label">1. Select image</label>
                             <input type="file" id="file_button" class="form-input">
+                            <label for="file_button" class="form-label">2. Click the button to detect cats</label>
                             <button type="button" id="submit_button" class="button">Detect Cat</button>
                         </form>
-                        <div id="status_area" class="status-area" style="display: none;"></div>
+                        <div id="status_area" class="status-area" style="display: none;">
+                            <div id="status_message"></div>
+                            <button id="reset_btn" type="button" style="margin-bottom:8px;">Reset</button>
+                        </div>
                         <div class="canvas-container">
                             <canvas id="canvas"></canvas>
                         </div>
@@ -145,5 +152,23 @@ and open the template in the editor.
 
         <script src="lib/opencv.js" type="text/javascript" onload="openCvready();"></script>
         <script src="lib/utils.js" type="text/javascript"></script>
+        <script>
+        // リセットボタンの処理
+        window.addEventListener('DOMContentLoaded', function() {
+            var resetBtn = document.getElementById('reset_btn');
+            if (resetBtn) {
+                resetBtn.addEventListener('click', function() {
+                    // canvasをクリア
+                    var canvas = document.getElementById('canvas');
+                    if (canvas) {
+                        var ctx = canvas.getContext('2d');
+                        ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    }
+                    // ステータスメッセージを更新
+                    setMessageToStatusArea('状態をリセットしました');
+                });
+            }
+        });
+        </script>
     </body>
 </html>
