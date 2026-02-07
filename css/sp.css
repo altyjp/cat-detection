@@ -9,15 +9,23 @@ and open the template in the editor.
 */
 html, body {
   height: 100%;
-  width: 100% ;
+  width: 100%;
   margin: 0;
   padding: 0;
-  font-family:sans-serif;
+  font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+  background: linear-gradient(135deg, #e0e7ff 0%, #f8fafc 100%);
+  color: #222;
 }
 
-h1,h2 {
-  font-weight: normal;
-  margin:0; 
+h1 {
+  font-size: 7vw;
+  font-weight: 700;
+  margin-bottom: 0.2em;
+}
+h2 {
+  font-size: 5vw;
+  font-weight: 600;
+  margin-top: 0.5em;
 }
 
 p{
@@ -25,22 +33,19 @@ p{
     margin-bottom: 0.2em;
 }
 
-button {
-    /* 文字サイズを1.4emに指定 */
-    font-size: 1.4em;
-
-    /* 縦方向に10px、
-     * 横方向に30pxの余白を指定 */
-    padding: 10px 30px;
-
-    /* 背景色を濃い青色に指定 */
-    background-color: #248;
-
-    /* 文字色を白色に指定 */
-    color: #fff;
-
-    /* ボーダーをなくす */
-    border-style: none;
+.button {
+  font-size: 1.1em;
+  padding: 12px 32px;
+  background: linear-gradient(90deg, #6366f1 0%, #60a5fa 100%);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(100, 100, 255, 0.08);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.button:hover {
+  background: linear-gradient(90deg, #4338ca 0%, #2563eb 100%);
 }
 div#start_screen_outer{
     margin:0; 
@@ -61,20 +66,90 @@ div#start_screen_inner{
 }
 
 
-div#baseitem{    
-    top:0;
+.app-header {
+  background: #6366f1;
+  color: #fff;
+  padding: 2em 0 1em 0;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(100, 100, 255, 0.08);
+}
+.app-header .sub {
+  font-size: 1em;
+  font-weight: 400;
+  margin-left: 0.5em;
+  color: #c7d2fe;
 }
 
-div#mainitem{
-    position: relative;
-    top: 0px;
-    width: 93%;
-    margin-left: auto;
-    margin-right: auto;
-    background-color: white;
-    padding-left: 10px;
-    padding-right: 10px;
-    font-size: 4vw;
+.card {
+  max-width: 98vw;
+  margin: 2em auto;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(100, 100, 255, 0.10);
+  overflow: hidden;
+}
+.card-body {
+  padding: 2em 1em 1.5em 1em;
+}
+.desc {
+  color: #555;
+  margin-bottom: 1.2em;
+}
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  margin-bottom: 1.5em;
+}
+.form-label {
+  font-weight: 500;
+  margin-bottom: 0.3em;
+}
+.form-input {
+  padding: 0.7em 1em;
+  border: 1px solid #c7d2fe;
+  border-radius: 6px;
+  font-size: 1em;
+  background: #f3f4f6;
+  transition: border 0.2s;
+}
+.form-input:focus {
+  border-color: #6366f1;
+  outline: none;
+}
+.status-area {
+  margin: 1em 0;
+  padding: 0.7em 1em;
+  background: #f3f4f6;
+  border-radius: 6px;
+  color: #374151;
+  font-size: 1em;
+  min-height: 2em;
+}
+.canvas-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 1.5em 0;
+}
+canvas {
+  border: 2px solid #6366f1;
+  border-radius: 8px;
+  background: #f8fafc;
+  box-shadow: 0 2px 8px rgba(100, 100, 255, 0.08);
+  width: 90vw;
+  max-width: 400px;
+}
+.footer {
+  text-align: right;
+  color: #6366f1;
+  font-size: 0.9em;
+  margin-top: 1em;
+}
+.error-message {
+  color: #ef4444;
+  font-size: 0.95em;
+  margin-top: 0.5em;
 }
 
 /* ボタンのスタイル */
@@ -113,12 +188,10 @@ div#btn-box{
 input#file_button{
   padding: 10px;
   font-size: 1em;
-  background-color: #abffae;
 }
 
 input#submit_button {
   padding: 10px;
   font-size: 1em;
   margin-top: 10px;
-  background-color: #abffae;
 }
